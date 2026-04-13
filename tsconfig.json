@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compileOnSave": false,
+  "files": [],
+  "references": [
+    {
+      "path": "./apps/banking-demo-e2e"
+    },
+    {
+      "path": "./apps/banking-demo"
+    }
+  ]
+}
