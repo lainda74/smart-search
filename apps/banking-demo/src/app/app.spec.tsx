@@ -1,27 +1,31 @@
 import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
+import { vi } from 'vitest';
 
 import App from './app';
+
+
+// Mock the custom element
+beforeAll(() => {
+  if (!customElements.get('smart-search')) {
+    customElements.define(
+      'smart-search',
+      class SmartSearch extends HTMLElement {}
+    );
+  }
+});
+
+afterEach(() => {
+  vi.resetAllMocks();
+});
 
 describe('App', () => {
   it('should render successfully', () => {
     const { baseElement } = render(
-      <BrowserRouter>
+      <MemoryRouter>
         <App />
-      </BrowserRouter>,
+      </MemoryRouter>,
     );
     expect(baseElement).toBeTruthy();
-  });
-
-  it('should have a greeting as the title', () => {
-    const { getAllByText } = render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>,
-    );
-    expect(
-      getAllByText(new RegExp('Welcome @temp-nx/banking-demo', 'gi')).length >
-        0,
-    ).toBeTruthy();
   });
 });

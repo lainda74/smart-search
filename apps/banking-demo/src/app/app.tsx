@@ -1,51 +1,94 @@
-// Uncomment this line to use CSS modules
-// import styles from './app.module.css';
-import NxWelcome from './nx-welcome';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import '@temp-nx/smart-search';
+import { getSearchResults } from './services/search.service';
+import { Header } from './components/header/header';
+import styles from './app.module.css';
+import { ThemeProvider } from './contexts/ThemeContext';
 
-import { Route, Routes, Link } from 'react-router-dom';
+interface SmartSearchElement extends HTMLElement {
+  loading?: boolean;
+  items?: unknown;
+}
 
 export function App() {
-  return (
-    <div>
-      <NxWelcome title="@temp-nx/banking-demo" />
+  const [selectedItem, setSelectedItem] = useState<any>(null);
 
-      {/* START: routes */}
-      {/* These routes and navigation have been generated for you */}
-      {/* Feel free to move and update them to fit your needs */}
-      <br />
-      <hr />
-      <br />
-      <div role="navigation">
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/page-2">Page 2</Link>
-          </li>
-        </ul>
+  const searchRef = useRef<HTMLElement | null>(null);
+
+  const handleSelect = useCallback((e: CustomEvent) => {
+    setSelectedItem(e.detail);
+  }, []);
+
+  const loadSearchData = useCallback(async (el: SmartSearchElement) => {
+    el.loading = true;
+    try {
+      const data = await getSearchResults();
+      el.items = data;
+      el.addEventListener('item-selected', handleSelect as EventListener);
+    } catch (error) {
+      console.error('Failed to fetch search data:', error);
+    } finally {
+      el.loading = false;
+    }
+  }, [handleSelect]);
+
+  useEffect(() => {
+    const el = searchRef.current as SmartSearchElement | null;
+    if (!el) return;
+
+    loadSearchData(el);
+
+    return () => {
+      el.removeEventListener('item-selected', handleSelect as EventListener);
+    };
+  }, [handleSelect, loadSearchData]);
+
+  return (
+    <ThemeProvider>
+      <div className={styles.dashboard}>
+        <Header searchRef={searchRef} />
+
+        <main className={styles['dashboard-content']}>
+          {selectedItem && (
+            <section>
+              <h2>Selected Item:</h2>
+              <pre>{JSON.stringify(selectedItem, null, 2)}</pre>
+            </section>
+          )}
+          <br />
+          <section>
+            <h2>Smart Search Component API</h2>
+            <h3>Properties</h3>
+            <ul>
+              <li>
+                <b>theme:</b> (string) - The theme of the component ('light' or
+                'dark').
+              </li>
+              <li>
+                <b>items:</b> (array) - The items to be displayed in the search
+                results.
+              </li>
+              <li>
+                <b>placeholder:</b> (string) - The placeholder text for the
+                search input.
+              </li>
+              <li>
+                <b>loading:</b> (boolean) - A boolean to indicate if the
+                component is in a loading state.
+              </li>
+            </ul>
+            <h3>Events</h3>
+            <ul>
+              <li>
+                <b>item-selected:</b> (CustomEvent) - Fired when an item is
+                selected from the search results. The selected item is
+                available in the `detail` property of the event.
+              </li>
+            </ul>
+          </section>
+        </main>
       </div>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <div>
-              This is the generated root route.{' '}
-              <Link to="/page-2">Click here for page 2.</Link>
-            </div>
-          }
-        />
-        <Route
-          path="/page-2"
-          element={
-            <div>
-              <Link to="/">Click here to go back to root page.</Link>
-            </div>
-          }
-        />
-      </Routes>
-      {/* END: routes */}
-    </div>
+    </ThemeProvider>
   );
 }
 

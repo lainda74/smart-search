@@ -1,1 +1,9 @@
-/* Your styles goes here. */
+.dashboard { 
+  margin: 0 auto; 
+}
+
+.dashboard-content { 
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px;
+}
