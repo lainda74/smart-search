@@ -49,12 +49,14 @@ export function App() {
         <Header searchRef={searchRef} />
 
         <main className={styles['dashboard-content']}>
-          {selectedItem && (
-            <section>
-              <h2>Selected Item:</h2>
+          <section>
+            <h2>Selected Item:</h2>
+            {selectedItem ? (
               <pre>{JSON.stringify(selectedItem, null, 2)}</pre>
-            </section>
-          )}
+            ) : (
+              <p>No option has been selected yet.</p>
+            )}
+          </section>
           <br />
           <section>
             <h2>Smart Search Component API</h2>
