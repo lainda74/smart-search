@@ -6,7 +6,8 @@
     "start": "nx serve banking-demo",
     "build": "nx build banking-demo",
     "test": "nx test smart-search",
-    "test-banking-app": "nx test banking-demo"
+    "test-banking-app": "nx test banking-demo",
+    "test-banking-e2e": "nx e2e banking-demo-e2e"
   },
   "private": true,
   "dependencies": {

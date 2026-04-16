@@ -13,20 +13,22 @@ export function Header({ searchRef }: HeaderProps) {
 
   return (
     <header className={styles['app-header']}>
-      <div className={styles.logo}>
-        <span>JB</span>
-      </div>
+      <div className={styles['header-content']}>
+        <div className={styles.logo}>
+          <span>JB</span>
+        </div>
 
-      <div className={styles['search-wrapper']}>
-        <smart-search
-          ref={searchRef}
-          placeholder="Search accounts, payments, or people..."
-          theme={theme}
-        />
-      </div>
+        <div className={styles['search-wrapper']}>
+          <smart-search
+            ref={searchRef}
+            placeholder="Search accounts, payments, or people..."
+            theme={theme}
+          />
+        </div>
 
-      <div className={styles['user-profile']}>
-        <ThemeToggle />
+        <div className={styles['user-profile']}>
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );

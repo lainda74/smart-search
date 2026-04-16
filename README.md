@@ -88,3 +88,10 @@ npm run test-banking-app
 # Run tests for the smart-search component library
 npm test
 ```
+
+You can run e2e tests for banking-demo-e2e app:
+
+```sh
+# Run e2e tests for the banking-demo application
+npm run test-banking-e2e
+```
